@@ -1,6 +1,10 @@
+import { useContext } from "react";
 import { CDN_URL } from "../utils/constants";
+import UserContext from "../utils/UserContext";
 const RestaurantCard=(props)=>{
     const {resData}=props;
+    const {loggedInUser}=useContext(UserContext)
+    console.log(loggedInUser);
     // console.log(resData);
     const {name,cuisines,
       cloudinaryImageId,avgRating,costForTwo,sla}=resData?.info;
@@ -16,7 +20,20 @@ const RestaurantCard=(props)=>{
         <h4>{avgRating} stars</h4>
         <h4>{costForTwo}</h4>
         <h4>{sla?.slaString}</h4>
+        <h4>USer: {loggedInUser}</h4>
         </div>
     )
+}
+//Higher Order Component
+// input - Restaurant Card==> Restaturant Card High Rated hotel
+export const withHighRatedLabel=(RestaurantCard)=>{
+  return(props)=>{
+    return(
+      <div>
+        <label className="absolute bg-black text-white m-2 p-2 rounded-lg" >High Rated Hotel </label>
+        <RestaurantCard {...props}/>
+      </div>
+    )
+  }
 }
 export default RestaurantCard;

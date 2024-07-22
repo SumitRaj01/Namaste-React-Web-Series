@@ -1,14 +1,16 @@
-import RestaurantCard from "./RestaurantCard";
-import { useState, useEffect } from "react";
+import RestaurantCard,{withHighRatedLabel} from "./RestaurantCard";
+import { useState, useEffect, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 const Body=()=>{
     // Local State Variable-- Super powerful variable
     const [listOfRestaurants,setListOfRestaurants]=useState([]);
     const [filteredRestaurant,setFilteredRestaurant]=useState([])
     const [searchText,setSearchText]=useState("");
-    console.log("Body rendered");
+    const RestaurantCardHighRated=withHighRatedLabel(RestaurantCard)
+    console.log("Body rendered",listOfRestaurants);
     useEffect(()=>{
         fetchData();
     },[]);
@@ -39,7 +41,7 @@ const Body=()=>{
     // if(listOfRestaurants.length===0){
     //     return <Shimmer></Shimmer>
     // }
- 
+    const {loggedInUser,setUserName}=useContext(UserContext)
     return listOfRestaurants.length===0?<Shimmer></Shimmer>:(
         <div className="body">
             <div className="filter flex">
@@ -65,9 +67,17 @@ const Body=()=>{
                 setListOfRestaurants(filteredList);
                 }}>Top Rated Restaurants</button>
                 </div>
+                <div className="search m-4 p-4 flex items-center">
+                <label>UserName</label>
+                <input className="border border-black p-2" value={loggedInUser} onChange={(e)=>setUserName(e.target.value)} />
+                </div>
             </div>
             <div className="flex flex-wrap">
-                {filteredRestaurant.map(restaurant=>(<Link key={restaurant.info?.id} to={"/restaurants/" +restaurant.info?.id} ><RestaurantCard  resData={restaurant}></RestaurantCard></Link>))}
+                {filteredRestaurant.map(restaurant=>(<Link key={restaurant.info?.id} to={"/restaurants/" +restaurant.info?.id} >
+                {/**if the avgRating is beyond 4.5 add High Rated hotel label to it */
+                restaurant.info.avgRating>=4.5?(<RestaurantCardHighRated resData={restaurant}/>):(<RestaurantCard  resData={restaurant}/>)
+                }
+                </Link>))}
             </div> 
         </div>
     )

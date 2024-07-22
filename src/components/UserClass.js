@@ -8,27 +8,27 @@ class UserClass extends React.Component{
                 location:'Default',
             }
         }
-        console.log(this.props.name +"Child Constructor");
+        // console.log(this.props.name +"Child Constructor");
     }
     async componentDidMount(){
-        console.log(this.props.name +'Child Component did mount');
+        // console.log(this.props.name +'Child Component did mount');
         //API calls
         const data= await fetch("https://api.github.com/users/akshaymarch7");
         const json=await data.json();
         this.setState({
             userInfo:json
         })
-        console.log(json);
+        // console.log(json);
     }
     componentDidUpdate(){
-        console.log("Component Did Update");
+        // console.log("Component Did Update");
     }
     componentWillUnmount(){
-        console.log('Component will Unmount');
+        // console.log('Component will Unmount');
     }
     render(){
         const {name,location,avatar_url}=this.state.userInfo
-        console.log(this.props.name +'ChildRender');
+        // console.log(this.props.name +'ChildRender');
         return(
         <div className="user-card"> 
         <img src={avatar_url}  />
